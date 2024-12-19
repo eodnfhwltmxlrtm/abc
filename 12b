@@ -1,0 +1,74 @@
+#include <iostream>
+#include <algorithm>
+#include <cmath>
+using namespace std;
+
+#define MOD 1000000007
+
+int dp[101][10001];
+int prefix[10001];
+
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
+    cout.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--)
+    {
+        fill(&dp[0][0], &dp[100][10001], 0);
+        fill(&prefix[0], &prefix[10001], 0);
+
+        int n, m, k;
+        cin >> n >> m >> k;
+
+        dp[0][0] = 1;
+        for (int i = 1; i <= n; i++)
+        {
+            dp[0][i] = 0;
+        }
+
+        for (int i = 1; i <= m; i++)
+        {
+            for (int j = 0; j <= n; j++)
+            {
+                if (j == 0)
+                {
+                    prefix[j] = dp[i - 1][j] % MOD;
+                }
+                else
+                {
+                    prefix[j] = (prefix[j - 1] + dp[i - 1][j]) % MOD;
+                }
+
+                if (j > k)
+                {
+                    dp[i][j] = (prefix[j] - prefix[j - k - 1] + MOD) % MOD;
+                }
+                else
+                {
+                    dp[i][j] = prefix[j];
+                }
+            }
+        }
+
+        int exception = 0;
+        for (int i = 1; i <= k; i++)
+        {
+            if (i * m <= n)
+                exception++;
+        }
+
+        int ans = 0;
+        for (int i = 0; i <= n; i++)
+        {
+            ans = (ans + dp[m][i]) % MOD;
+        }
+        ans = (ans - exception - 1 + MOD) % MOD;
+        cout << ans << '\n';
+    }
+}
+
+//사탕분배
