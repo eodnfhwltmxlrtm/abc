@@ -1,0 +1,50 @@
+#include <iostream>
+#include <queue>
+#include <algorithm>
+using namespace std;
+
+priority_queue<pair<int,int>, vector<pair<int,int>>, greater<pair<int, int>>> crops;
+priority_queue<pair<int,int>> available_crops; 
+int pk[1000001];
+
+int main() {
+	ios_base::sync_with_stdio(false);
+	cin.tie(nullptr);
+	cout.tie(nullptr);
+
+	int t;
+	cin >> t;
+	while (t--) {      
+        int n, k;
+		cin >> n >> k;
+
+		int time;
+		for (int i = 0; i < n; i++) {
+			cin >> time;
+			crops.push({ time, i });
+		}
+		for (int i = 0; i < n; i++) {
+			cin >> pk[i];
+		}
+
+        long long ans = 0;
+		long long cur_time = k;
+		while (!crops.empty()||!available_crops.empty()) {
+			while(!crops.empty()&&crops.top().first<=cur_time){
+                pair<int,int> top = crops.top(); crops.pop();
+                available_crops.push({pk[top.second], top.first});
+            }
+
+            if(!available_crops.empty()){
+                pair<int,int> grow = available_crops.top(); available_crops.pop();
+                ans += (cur_time-grow.second)*grow.first;
+                cur_time++;
+            }else{
+                cur_time = crops.top().first;
+            }
+		}
+        cout<<ans<<'\n';
+	}
+}
+
+//농작물
