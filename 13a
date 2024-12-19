@@ -1,0 +1,72 @@
+#include <iostream>
+#include <stack>
+#include <algorithm>
+#include <vector>
+using namespace std;
+
+vector<vector<int>> A;
+vector<int> target;
+int n,m;
+int Q;
+
+void init()
+{
+    A.clear();
+    target.clear();
+    n=0;m=0;Q=0;
+}
+int main()
+{
+    int T; cin >> T;
+    while(T--)
+    {
+        init();
+        cin >> n >> m;
+        A.resize(n, vector<int> (m));
+        for(int i=0; i<n; i++)
+        {
+            for(int j=0; j<m; j++)
+            {
+                cin >> A[i][j];
+            }
+        }
+        cin >> Q;
+        target.resize(Q);
+        for(int i=0; i<Q; i++)
+        {
+            cin >> target[i];
+        }
+
+        for(auto q : target)
+        {
+            bool found = false;
+            int first = 0; int last = n - 1;
+            while(first <= last)
+            {
+                int mid = (first + last) / 2;
+
+                if(A[mid][0] <= q && A[mid][m-1] >= q)
+                {
+                    if(binary_search(A[mid].begin(), A[mid].end(), q))
+                    {
+                        found = true;
+                    }
+                    break;
+                }
+                else if(A[mid][0] < q)
+                {
+                    first = mid + 1;
+                }
+                else
+                {
+                    last = mid - 1;
+                }
+            }
+            cout << (found ? 1 : 0) << ' ';
+        }
+
+        cout << '\n';
+    }
+}
+
+//배열정렬
