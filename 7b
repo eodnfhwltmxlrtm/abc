@@ -1,0 +1,37 @@
+#include <iostream>
+#include <cmath>
+using namespace std; 
+
+int n, m;
+int board[501][501];
+int table[501][501];
+
+int main() {
+	ios_base::sync_with_stdio(false);
+	cin.tie(nullptr);
+	cout.tie(nullptr);
+
+	int t;
+	cin >> t;
+	while (t--) {
+		cin >> n >> m;
+		int box = 0;
+		for (int i = 1; i <= n; i++) {
+			for (int j = 1; j <= m; j++) {
+				cin >> board[i][j];
+				if (board[i][j] == 1) box++;
+			}
+		}
+
+		for (int i = 1; i <= n; i++) {
+			for (int j = 1; j <= m; j++) {
+				table[i][j] = max(table[i - 1][j], table[i][j - 1]) + board[i][j];
+			}
+		}
+
+		cout << box - table[n][m] << '\n';
+	}
+
+}
+
+//청소로봇
